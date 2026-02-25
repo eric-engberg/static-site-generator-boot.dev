@@ -1,7 +1,9 @@
 import os, shutil
+from gencontent import generate_page
 
 def main():
     setup_public_directory()
+    generate_page("content/index.md", "template.html", "public/index.html")
 
 def setup_public_directory():
     if os.path.exists("public"):
