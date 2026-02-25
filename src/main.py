@@ -1,16 +1,23 @@
-import os, shutil
-from gencontent import generate_page
+import os, shutil, sys
+from gencontent import generate_pages_recursively
 
 def main():
-    setup_public_directory()
-    generate_page("content/index.md", "template.html", "public/index.html")
+    if len(sys.argv) != 2:
+        basepath = "/"
+    basepath = sys.argv[1]
+    if not basepath.endswith("/"):
+        basepath += "/"
+    if not basepath.startswith("/"):
+        basepath = "/" + basepath
+    setup_docs_directory()
+    generate_pages_recursively("content", "template.html", "docs", basepath)
 
-def setup_public_directory():
-    if os.path.exists("public"):
-        shutil.rmtree("public")
-        os.mkdir("public")
+def setup_docs_directory():
+    if os.path.exists("docs"):
+        shutil.rmtree("docs")
+        os.mkdir("docs")
 
-    copy_dir("static", "public")
+    copy_dir("static", "docs")
 
 def copy_dir(src_dir, dest_dir):
     for file in os.listdir(src_dir):
